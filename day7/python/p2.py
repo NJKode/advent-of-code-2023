@@ -137,7 +137,6 @@ def sort_func(hand_tup):
 	main_score = (len(order) - order.index(score_s)) * len(order) * 10000000000000000
 
 	score_index = (main_score + score_1 + score_2 + score_3 + score_4 + score_5)
-	# print(f'{hand}: {main_score} + {score_1} + {score_2} + {score_3} + {score_4} + {score_5} = {score_index}')
 	return score_index
 
 rs = sorted(hands, key=sort_func)
@@ -157,8 +156,3 @@ for l in range(len(rs)):
 	score += hand_score
 
 print(score)
-
-
-
-
-#251899709

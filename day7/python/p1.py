@@ -1,5 +1,4 @@
 import re
-from random import sample
 
 text_file = open("input-p1-test.txt", "r")
 input = text_file.read()
@@ -14,7 +13,6 @@ rank = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2']
 order = ['5k', '4k', 'fh', '3k', '2p', '1p', '0']
 order
 
-# lines = sample(all_lines, 10)
 lines = all_lines
 
 for line in lines:
