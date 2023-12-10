@@ -1,35 +1,26 @@
-import re
-
 text_file = open("input-p1.txt", "r")
 input = text_file.read()
 text_file.close()
 
 lines = input.splitlines()
-total = 0
 
 start_y = 0
 start_x = 0
-x_max = len(lines[0])
 loop_map = {}
 
 for l in range(len(lines)):
 	line = lines[l]
-	search = re.search('S', line)
-	if search != None:
+	if 'S' in line:
 		start_y = l
-		start_x = search.start()
+		start_x = line.index('S')
 		break
 
 start = (start_x, start_y)
 loop_map[start] = True
-
 direction = 'down' # TODO calculate this
-
 next_loc = start
 
-steps = 0
 while True:
-	steps += 1
 	if direction == 'up':
 		next_loc = (next_loc[0], next_loc[1] - 1)
 	elif direction == 'down':
@@ -60,20 +51,20 @@ while True:
 possible_tiles = {}
 for l in range(len(lines)):
 	line = lines[l]
-	count_left = 0
+	edge_count = 0
 	polarity = ''
 	corner_count = 0
 
 	for t in range(len(line)):
 		coords = (t, l)
-		tile = line[t]
 		prev_polarity = polarity
 
 		if coords in loop_map:
+			tile = line[t]
 			if tile == '-':
 				continue
 			if tile == '|':
-				count_left += 1
+				edge_count += 1
 				continue
 
 			# tile in corners
@@ -82,19 +73,18 @@ for l in range(len(lines)):
 			if prev_polarity == '':
 				prev_polarity = polarity
 			if polarity == prev_polarity:
-				count_left += 1
+				edge_count += 1
 			if corner_count % 2 == 0:
 				polarity = ''
 			continue
 
 
-		if count_left % 2 == 1:
+		if edge_count % 2 == 1:
 			possible_tiles[coords] = 1
 
 def print_map():
 	for l in range(len(lines)):
 		line = lines[l]
-		count_left = 0
 		for t in range(len(line)):
 			coords = (t, l)
 			if coords in possible_tiles:
