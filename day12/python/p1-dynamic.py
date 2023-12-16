@@ -1,14 +1,16 @@
 import re
-import functools
+import random
+debug_mode = False
 text_file = open("input-p1.txt", "r")
 input = text_file.read()
 text_file.close()
 
 def call_combinations_in_slot(spring_groups: list[int], slot: str):
-	result = combinations_in_slot(tuple(spring_groups), slot)
+	if debug_mode: print(f'{spring_groups} in {slot}')
+	result = combinations_in_slot(spring_groups, slot)
+	if debug_mode: print(f'{spring_groups} in {slot} | {result}')
 	return result
 
-@functools.lru_cache
 def combinations_in_slot(spring_groups: list[int], slot: str):
 	slot_size = len(slot)
 	min_size = sum(spring_groups) + len(spring_groups) - 1
@@ -60,11 +62,12 @@ def combinations_in_slot(spring_groups: list[int], slot: str):
 	return num_combinations
 
 def call_combinations_in_multiple_slots(springs: int, slots: list[str]):
-	result = combinations_in_multiple_slots(springs, tuple(slots))
+	if debug_mode: print(f'{springs} in {slots}')
+	result = combinations_in_multiple_slots(springs, slots)
+	if debug_mode: print(f'{springs} in {slots} | {result}')
 	return result
 
-@functools.lru_cache
-def combinations_in_multiple_slots(springs: int, slots):
+def combinations_in_multiple_slots(springs: int, slots: list[str]):
 	valid_slot_indeces = [] # discard slots that are smaller than len springs
 	required_slot_index = -1
 	for s, slot in enumerate(slots):
@@ -87,10 +90,11 @@ def combinations_in_multiple_slots(springs: int, slots):
 
 
 def call_arrange_spring_groups_in_slots(spring_groups: list[int], slots: list[str]):
-	result = arrange_spring_groups_in_slots(tuple(spring_groups), tuple(slots))
+	if debug_mode: print(f'{spring_groups} in {slots}')
+	result = arrange_spring_groups_in_slots(spring_groups, slots)
+	if debug_mode: print(f'{spring_groups} in {slots} | {result}')
 	return result
 
-@functools.lru_cache
 def arrange_spring_groups_in_slots(spring_groups: list[int], slots: list[str]):
 	if len(spring_groups) == 0 or len(slots) == 0:
 		return 0
@@ -155,7 +159,7 @@ total_num_arrangements = 0
 
 def process_line(line: str):
 	parts = line.split()
-	arrangement = ((parts[0] + '?') * 5)[:-1]
+	arrangement = parts[0]
 	nums_s = re.findall(r'\d+', parts[1])
 	spring_groups = []
 	for num_s in nums_s:
@@ -164,18 +168,21 @@ def process_line(line: str):
 	slots = arrangement.split('.')
 	slots = list(filter(None, slots))
 
-	spring_groups *= 5
-
 	num_arrangements = call_arrange_spring_groups_in_slots(spring_groups, slots)
+	print(f'{line} | {num_arrangements}')
 	return num_arrangements
 
 
-# test = random.randrange(0, len(lines))
+test = random.randrange(0, len(lines))
 # process_line(lines[test])
 for line in lines:
 	arrs = process_line(line)
 	total_num_arrangements += arrs
 
-print(total_num_arrangements)
 
-# 5095531652439 (too low)
+answer = 7716
+print(total_num_arrangements)
+if answer == total_num_arrangements:
+	print('Succeeded!')
+else:
+	print('Failed. Required:', answer)
