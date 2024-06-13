@@ -34,14 +34,13 @@ for name, (type, state, receivers) in modules.items():
 			conjunction_map[r][name] = 0
 			break
 
-modules['rx'] = ('end', 0, [])
+end_mod = 'qq'
 
 low_pulse_count = 0
 high_pulse_count = 0
 run_count = 0
 
-while modules['rx'][1] != 1:
-	modules['rx'] = ('end', 0, [])
+while modules[end_mod][1] != 1:
 	run_count += 1
 	initial_pulse = ('button', 'broadcaster', 0)
 	pulse_queue = [initial_pulse]
@@ -58,10 +57,6 @@ while modules['rx'][1] != 1:
 			continue
 		module = modules[mod_name]
 		type, state, receivers = module
-
-		if type == 'end' and pulse == 0:
-			print(run_count)
-			modules[mod_name] = (type, state + 1, receivers)
 
 		if type == 'broadcaster':
 			for r in receivers:
@@ -82,9 +77,5 @@ while modules['rx'][1] != 1:
 					break
 			for r in receivers:
 					pulse_queue.append((mod_name, r, new_pulse))
-
-
-print(high_pulse_count, low_pulse_count)
-print(high_pulse_count * low_pulse_count)
 
 print(run_count)
